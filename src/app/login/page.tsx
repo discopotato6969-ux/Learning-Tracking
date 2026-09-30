@@ -1,6 +1,7 @@
 "use client"
 
 import { ArrowRight, LockKeyhole } from "lucide-react"
+import Image from "next/image"
 import { useRouter } from "next/navigation"
 import { FormEvent, useState } from "react"
 
@@ -29,8 +30,8 @@ export default function LoginPage() {
       }
 
       const nextPath = new URLSearchParams(window.location.search).get("next")
-      window.sessionStorage.setItem("learning_hub_just_logged_in", "true")
-      router.replace(nextPath?.startsWith("/") ? nextPath : "/")
+      const destination = new URL(nextPath || "/today", window.location.origin)
+      router.replace(destination.origin === window.location.origin ? destination.pathname + destination.search : "/today")
       router.refresh()
     } catch {
       setError("Unable to sign in right now. Please try again.")
@@ -42,10 +43,10 @@ export default function LoginPage() {
   return (
     <main className="flex min-h-screen items-center justify-center bg-muted/30 px-5 py-10">
       <div className="w-full max-w-sm rounded-2xl border bg-background p-7 shadow-sm sm:p-8">
-        <div className="flex size-11 items-center justify-center rounded-xl bg-primary text-lg font-bold text-primary-foreground">L</div>
-        <p className="mt-8 text-sm font-medium text-muted-foreground">Private course library</p>
+        <Image src="/icon-192.png" alt="Aditya" width={64} height={64} className="size-16 rounded-2xl object-cover" priority unoptimized />
+        <p className="mt-8 text-sm font-medium text-muted-foreground">Aditya | My personal Tracker</p>
         <h1 className="mt-2 text-3xl font-semibold tracking-tight">Welcome back</h1>
-        <p className="mt-3 text-sm leading-6 text-muted-foreground">Sign in to continue to your Learning Tracking library.</p>
+        <p className="mt-3 text-sm leading-6 text-muted-foreground">Sign in to continue to Aditya | My personal Tracker.</p>
         <form onSubmit={handleSubmit} className="mt-8 space-y-4">
           <div><label htmlFor="username" className="mb-1.5 block text-sm font-medium">Username</label><input id="username" name="username" autoComplete="username" required value={username} onChange={(event) => setUsername(event.target.value)} className="h-10 w-full rounded-lg border bg-background px-3 text-sm outline-none focus:border-ring focus:ring-2 focus:ring-ring/20" /></div>
           <div><label htmlFor="password" className="mb-1.5 block text-sm font-medium">Password</label><input id="password" name="password" type="password" autoComplete="current-password" required value={password} onChange={(event) => setPassword(event.target.value)} className="h-10 w-full rounded-lg border bg-background px-3 text-sm outline-none focus:border-ring focus:ring-2 focus:ring-ring/20" /></div>

@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server"
+import { authorize } from "@/lib/session"
 
 interface YouTubePlaylistItem {
   contentDetails?: { videoId?: string }
@@ -15,6 +16,7 @@ interface YouTubePlaylistResponse {
 }
 
 export async function GET(request: Request) {
+  const denied = await authorize(); if (denied) return denied
   const playlistId = new URL(request.url).searchParams.get("playlistId")
   const apiKey = process.env.YOUTUBE_API_KEY
 

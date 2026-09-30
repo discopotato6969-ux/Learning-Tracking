@@ -1,6 +1,7 @@
 import { createHmac, timingSafeEqual } from "node:crypto"
 
 export const sessionCookieName = "learning_hub_session"
+export const sessionMaxAge = 60 * 60 * 24 * 30
 
 function getAuthSecret() {
   const secret = process.env.LEARNING_HUB_SESSION_SECRET
@@ -23,7 +24,7 @@ export function isValidPassword(password: string) {
 }
 
 export function createSessionToken() {
-  const payload = "learning-hub-authenticated"
+  const payload = `owner:${Math.floor(Date.now() / 1000) + sessionMaxAge}`
   const signature = createHmac("sha256", getAuthSecret()).update(payload).digest("hex")
   return `${payload}.${signature}`
 }
@@ -31,7 +32,11 @@ export function createSessionToken() {
 export function isValidSessionToken(token: string | undefined) {
   if (!token) return false
 
-  const expected = createSessionToken()
+  const parts = token.split(".")
+  if (parts.length !== 2 || !/^owner:\d+$/.test(parts[0]) || !/^[a-f0-9]{64}$/.test(parts[1])) return false
+  const expires = Number(parts[0].split(":")[1])
+  if (expires <= Date.now() / 1000 || expires > Date.now() / 1000 + sessionMaxAge + 60) return false
+  const expected = `${parts[0]}.${createHmac("sha256", getAuthSecret()).update(parts[0]).digest("hex")}`
   const receivedBuffer = Buffer.from(token)
   const expectedBuffer = Buffer.from(expected)
   return receivedBuffer.length === expectedBuffer.length && timingSafeEqual(receivedBuffer, expectedBuffer)

@@ -1,4 +1,14 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Aditya | My personal Tracker — courses and daily routines
+
+A private, single-account Next.js app for a daily checklist, recurring routines, course study plans, and consistency history. Open `/today` for daily tracking or `/` for the original course dashboard.
+
+Read [the implementation and deployment guide](docs/DAILY-TRACKER.md) for data migration, persistent hosting, environment variables, Web Push scheduling, iPhone installation, tests, and known limits. The original catalog and links remain in `src/data/courses.ts`; all saved progress and daily records share the ignored `.data/learning-hub.json` file. Back it up before deploying.
+
+**Hosting:** this file-backed app needs persistent writable disk. The generic Vercel link below is not evidence that the app is deployed there; do not use ephemeral serverless disk for user data. Morning reminders require configured VAPID keys and a separately configured authenticated server-side scheduler. Real-device delivery has not been verified.
+
+Checks: `npm test`, `npm run lint`, `npm run build`.
+
+## Next.js development
 
 ## Getting Started
 

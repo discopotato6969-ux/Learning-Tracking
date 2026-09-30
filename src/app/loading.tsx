@@ -1,0 +1,1 @@
+export default function Loading() { return <main className="mx-auto max-w-5xl p-8" aria-busy="true"><p role="status">Getting things ready…</p><div className="mt-6 h-36 animate-pulse rounded-2xl bg-muted" /></main> }

@@ -33,7 +33,7 @@ export default async function CoursesPage({
               <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">My courses</h1>
               <div className="flex items-center gap-2 rounded-lg border bg-background px-3 py-2 text-sm text-muted-foreground"><Filter className="size-4" aria-hidden="true" />{activeCategory ?? "All categories"}</div>
             </div>
-            <p className="mt-3 text-sm leading-6 text-muted-foreground">Browse everything in your My Learning Tracking collection.</p>
+            <p className="mt-3 text-sm leading-6 text-muted-foreground">Browse everything in your Aditya | My personal Tracker collection.</p>
           </section>
           {filteredCourses.length > 0 ? <CourseGrid courses={filteredCourses} /> : <div className="rounded-xl border border-dashed bg-background p-10 text-center"><h2 className="font-semibold">No courses in this category yet</h2><p className="mt-2 text-sm text-muted-foreground">Try another category or browse your full library.</p></div>}
         </div>

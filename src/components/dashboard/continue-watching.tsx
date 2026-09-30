@@ -10,7 +10,7 @@ export default function ContinueWatching({ courses }: { courses: Course[] }) {
     <section id="continue-watching" aria-labelledby="continue-watching-heading">
       <div className="mb-5 flex items-center justify-between gap-4">
         <h2 id="continue-watching-heading" className="text-lg font-semibold tracking-tight">Continue Watching</h2>
-        <Link href="/watch" className="text-sm font-medium text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">View all</Link>
+        <Link href="/courses" className="text-sm font-medium text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">View all</Link>
       </div>
       <div className="grid gap-4 lg:grid-cols-3">
         {inProgress.map((course) => (

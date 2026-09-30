@@ -83,7 +83,7 @@ function PlaylistPlayer({ playlistId, lessonId }: { playlistId: string; lessonId
             if (lessonId && typeof index === "number" && index >= 0) {
               setActiveIndex(index)
               window.localStorage.setItem(`playlist:${lessonId}`, String(index))
-              fetch("/api/progress", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ lessonId, completed: false, positionSeconds: 0, playlistIndex: index }) }).catch(() => undefined)
+              fetch("/api/progress", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ lessonId, playlistIndex: index }) }).catch(() => undefined)
             }
           },
         },

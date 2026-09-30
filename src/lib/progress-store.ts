@@ -1,47 +1,35 @@
 import "server-only"
 
-import { mkdir, readFile, writeFile } from "node:fs/promises"
-import path from "node:path"
+import { connection } from "next/server"
+import { readStore, updateStore, type LessonProgress } from "./file-store"
+import { requireSession } from "./session"
 
 import type { Course } from "@/data/courses"
-
-interface LessonProgress {
-  completed: boolean
-  positionSeconds: number
-  playlistIndex?: number
-  updatedAt: string
-}
 
 export interface ProgressStore {
   lessons: Record<string, LessonProgress>
 }
 
-const dataDirectory = path.join(process.cwd(), ".data")
-const dataFile = path.join(dataDirectory, "learning-hub.json")
-
-const emptyStore: ProgressStore = { lessons: {} }
-
 export async function readProgressStore(): Promise<ProgressStore> {
-  try {
-    const content = await readFile(dataFile, "utf8")
-    return JSON.parse(content) as ProgressStore
-  } catch {
-    return emptyStore
-  }
+  // Progress changes on disk between requests and must never be baked into prerendered pages.
+  await connection()
+  await requireSession()
+  return { lessons: (await readStore()).lessons }
 }
 
 export async function saveLessonProgress(
   lessonId: string,
-  progress: Pick<LessonProgress, "completed" | "positionSeconds" | "playlistIndex">,
+  progress: Partial<Pick<LessonProgress, "completed" | "positionSeconds" | "playlistIndex">>,
 ) {
-  const store = await readProgressStore()
-  store.lessons[lessonId] = {
+  await requireSession()
+  return updateStore(store => {
+    store.lessons[lessonId] = {
+    ...(store.lessons[lessonId] ?? { completed: false, positionSeconds: 0 }),
     ...progress,
     updatedAt: new Date().toISOString(),
   }
-  await mkdir(dataDirectory, { recursive: true })
-  await writeFile(dataFile, `${JSON.stringify(store, null, 2)}\n`, "utf8")
   return store.lessons[lessonId]
+  })
 }
 
 export function applyProgress(course: Course, store: ProgressStore): Course {

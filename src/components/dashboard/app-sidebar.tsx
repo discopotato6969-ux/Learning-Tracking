@@ -11,13 +11,19 @@ import {
   X,
 } from "lucide-react"
 import Link from "next/link"
+import Image from "next/image"
 import { usePathname } from "next/navigation"
 import { useRouter } from "next/navigation"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 
 import { cn } from "@/lib/utils"
 
 const primaryNavigation = [
+  { label: "Today", href: "/today", icon: LayoutDashboard },
+  { label: "Tasks & routines", href: "/tasks", icon: BookOpen },
+  { label: "Study plan", href: "/study", icon: Bookmark },
+  { label: "Consistency", href: "/insights", icon: BarChart3 },
+  { label: "Reminders", href: "/settings", icon: CirclePlay },
   { label: "Dashboard", href: "/", icon: LayoutDashboard },
   { label: "My Courses", href: "/courses", icon: BookOpen },
   { label: "Continue Watching", href: "/#continue-watching", icon: CirclePlay },
@@ -50,10 +56,8 @@ function SidebarContent({ pathname, onLogout }: { pathname: string; onLogout: ()
         href="/"
         className="flex items-center gap-3 px-3 text-base font-semibold tracking-tight focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
       >
-        <span className="flex size-8 items-center justify-center rounded-lg bg-primary text-sm font-bold text-primary-foreground">
-          L
-        </span>
-        My Learning Tracking
+        <Image src="/icon-192.png" alt="" width={36} height={36} className="size-9 shrink-0 rounded-lg object-cover" unoptimized />
+        <span className="text-sm leading-5">Aditya | My personal Tracker</span>
       </Link>
 
       <div className="mt-10 flex-1">
@@ -129,17 +133,6 @@ export default function AppSidebar() {
     router.replace("/login")
   }
 
-  useEffect(() => {
-    const navigationEntry = performance.getEntriesByType("navigation")[0] as PerformanceNavigationTiming | undefined
-    if (navigationEntry?.type !== "reload") return
-    if (window.sessionStorage.getItem("learning_hub_just_logged_in") === "true") {
-      window.sessionStorage.removeItem("learning_hub_just_logged_in")
-      return
-    }
-
-    fetch("/api/auth/logout", { method: "POST" }).finally(() => router.replace("/login"))
-  }, [router])
-
   return (
     <>
       <button
@@ -152,7 +145,7 @@ export default function AppSidebar() {
         <Menu className="size-5" aria-hidden="true" />
       </button>
 
-      <aside className="fixed inset-y-0 left-0 z-30 hidden w-64 border-r bg-background md:block">
+      <aside className="fixed inset-y-0 left-0 z-30 hidden w-64 overflow-y-auto border-r bg-background md:block">
         <SidebarContent pathname={pathname} onLogout={handleLogout} />
       </aside>
 

@@ -1,0 +1,2 @@
+"use client"
+export default function ErrorPage({ reset }: { reset: () => void }) { return <main className="mx-auto max-w-lg space-y-5 p-8"><h1 className="text-2xl font-semibold">We couldn’t load your page</h1><p>Your saved data has not been reset. Check your connection and try again.</p><button onClick={reset} className="rounded-lg bg-primary px-5 py-3 text-primary-foreground">Try again</button></main> }

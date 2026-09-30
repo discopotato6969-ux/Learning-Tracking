@@ -3,6 +3,7 @@
 import { ArrowLeft, ArrowRight, Check } from "lucide-react"
 import Link from "next/link"
 import { useState } from "react"
+import { useRouter } from "next/navigation"
 
 import type { Lesson } from "@/data/courses"
 
@@ -13,6 +14,7 @@ interface LessonNavigationProps {
 }
 
 export default function LessonNavigation({ lesson, previousLesson, nextLesson }: LessonNavigationProps) {
+  const router = useRouter()
   const [isComplete, setIsComplete] = useState(lesson.completed)
   const [isSaving, setIsSaving] = useState(false)
 
@@ -25,12 +27,12 @@ export default function LessonNavigation({ lesson, previousLesson, nextLesson }:
       const response = await fetch("/api/progress", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ lessonId: lesson.id, completed, positionSeconds: 0 }),
+        body: JSON.stringify({ lessonId: lesson.id, completed }),
       })
 
       if (!response.ok) {
         setIsComplete(!completed)
-      }
+      } else router.refresh()
     } catch {
       setIsComplete(!completed)
     } finally {
